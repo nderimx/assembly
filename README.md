@@ -1,29 +1,31 @@
 # Assembly Tutorial
 
-# x86
+## x86
 In the x86 part I've been taking notes by following the tutorialspoint.com/assembly_programming tutorial
-### Compile
+## Compile
 `nasm -f elf hello.asm`
 `ld -m elf_i386 -s -o hello hello.o`
 
-### ASM Sections
+## ASM Sections
 * .text - Code
 * .data - Declare && Set Constants
 * .bss  - Declare Variable Placeholders
 
-### Memory Segments
+## Memory Segments
 * Data segment  - (.data & .bss)
 * Code segment  - (.text)
 * Stack         - contains data values passed to functions & procedures within the program
 
-### Registers
+## Registers
 In IA-32 arch. there are **ten** 32-bit and **six** 16-bit Registers
-* General Registers
-  * Data
-  * Pointer
-  * Index
-* Control Registers
-* Segment Registers
+* [General Registers](#general-registers)
+  * [Data](#data-registers)
+  * [Pointer](#pointer-registers)
+  * [Index](#index-registers)
+* [Control Registers](#control-registers)
+* [Segment Registers](#segment-registers)
+
+## General Registers
 
 ### Data Registers
 *Four* 32-bit Registers can be used in three ways:
