@@ -78,7 +78,7 @@ Usually the exact location of an address is determined by combining the starting
 ## System Calls
 6 Registers used as paramaters in Sys Calls:
 * EBX
-* ACX
+* ECX
 * EDX
 * ESI
 * EDI
@@ -132,4 +132,37 @@ Usually the exact location of an address is determined by combining the starting
 ### List with syscalls is in: /usr/include/asm*/unistd.h
 
 ### POSIX - Portable OS Interface - (?) POSIX defines the API for syscalls, filedescriptors,... along with shells and utility interfaces for maintaining compatibility between OSes
+
+## Addressing
+
+3 Basic Modes of Addressing:
+* Register Addressing         - addresses or values inside registers
+* Immediate Addressing        - in-code hardcoded constants
+* Memory Addressing           - using addresses defined in data segment
+  * Direct Memory Addressing    - using addresses defined in data segment ^
+  * Direct Offset-Addressing    - using addresses of arrays defined in data segment
+    * e.g. -v
+      * `WORD_ARRAY DW 324, 643, 654, 113`
+      * `MOV CX, WORD_ARRAY + 2` OR `MOV CX, WORD_ARRAY[2]` where WORD_ARRAY is the first address in the array, and 2 is the offset, or logically the 3rd address
+  * Indirect Memory Addressing  - basically assigning values to an array element
+    * e.g. -v
+      * `WORD_ARRAY TIMES 10 DW 0`
+      * `MOV EBX, [MY_TABLE]` ; move the effective_address/pointer to EBX
+      * `MOV [EBX], 110`  ; first element equals 110 (mannipulating the memory EBX points to)
+      * `ADD EBX, 2`  ; offset by 2, so the current effective address points to the third element
+      * `MOV [EBX], 123`  ; set third element to 123
+
+### MOV
+  MOV destination, source
+  The two operands can be in any combination of the three addressing modes, except the destination operand cannot be an immediate address
+  Both operands must be of the same size
+
+#### Type Specifiers
+* BYTE = 1B
+* WORD = 2B
+* DWORD = 4B
+* QWORD = 8B
+* TBYTE = 10B
+
+e.g. -> `MOV	[name],  DWORD 'Nuha'` ; HERE we specified the type of immediate to avoid ambiguity
 
