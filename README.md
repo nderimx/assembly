@@ -129,28 +129,28 @@ Usually the exact location of an address is determined by combining the starting
 `mov eax, 6  ; syscall number` __sys_close__
 `int 0x80   ; call kernel`
 
-### List with syscalls is in: /usr/include/asm*/unistd.h
+#### List with syscalls is in: /usr/include/asm*/unistd.h
 
-### POSIX - Portable OS Interface - (?) POSIX defines the API for syscalls, filedescriptors,... along with shells and utility interfaces for maintaining compatibility between OSes
+#### POSIX - Portable OS Interface - (?) POSIX defines the API for syscalls, filedescriptors,... along with shells and utility interfaces for maintaining compatibility between OSes
 
 ## Addressing
 
 3 Basic Modes of Addressing:
-* Register Addressing         - addresses or values inside registers
-* Immediate Addressing        - in-code hardcoded constants
-* Memory Addressing           - using addresses defined in data segment
-  * Direct Memory Addressing    - using addresses defined in data segment ^
-  * Direct Offset-Addressing    - using addresses of arrays defined in data segment
-    * e.g. -v
-      * `WORD_ARRAY DW 324, 643, 654, 113`
-      * `MOV CX, WORD_ARRAY + 2` OR `MOV CX, WORD_ARRAY[2]` where WORD_ARRAY is the first address in the array, and 2 is the offset, or logically the 3rd address
-  * Indirect Memory Addressing  - basically assigning values to an array element
-    * e.g. -v
-      * `WORD_ARRAY TIMES 10 DW 0`
-      * `MOV EBX, [MY_TABLE]` ; move the effective_address/pointer to EBX
-      * `MOV [EBX], 110`  ; first element equals 110 (mannipulating the memory EBX points to)
-      * `ADD EBX, 2`  ; offset by 2, so the current effective address points to the third element
-      * `MOV [EBX], 123`  ; set third element to 123
+#### Register Addressing         - addresses or values inside registers
+#### Immediate Addressing        - in-code hardcoded constants
+#### Memory Addressing           - using addresses defined in data segment
+* Direct Memory Addressing    - using addresses defined in data segment ^
+* Direct Offset-Addressing    - using addresses of arrays defined in data segment
+  * e.g. -v
+    * `WORD_ARRAY DW 324, 643, 654, 113`
+    * `MOV CX, WORD_ARRAY + 2` OR `MOV CX, WORD_ARRAY[2]` where WORD_ARRAY is the first address in the array, and 2 is the offset, or logically the 3rd address
+* Indirect Memory Addressing  - basically assigning values to an array element
+  * e.g. -v
+    * `WORD_ARRAY TIMES 10 DW 0`
+    * `MOV EBX, [MY_TABLE]` ; move the effective_address/pointer to EBX
+    * `MOV [EBX], 110`  ; first element equals 110 (mannipulating the memory EBX points to)
+    * `ADD EBX, 2`  ; offset by 2, so the current effective address points to the third element
+    * `MOV [EBX], 123`  ; set third element to 123
 
 ### MOV
   MOV destination, source
@@ -166,3 +166,61 @@ Usually the exact location of an address is determined by combining the starting
 
 e.g. -> `MOV	[name],  DWORD 'Nuha'` ; HERE we specified the type of immediate to avoid ambiguity
 
+## Variables
+
+### get from laptop uncommited content
+
+## Constants
+### Directives
+* EQU (e.g. `SYS_WRITE EQU 4`)
+* %assign - for numbers; redefinable; e.g. `%assign GRAV 10`, `%assign GRAV 20`
+* %define - for numbers & strings; redefinable; e.g. `%define PTR [EBP+3]`
+
+## Arithmetic Instructions
+### INC - increment
+Syntax -> `INC destination`
+Examples:
+`INC EBX`
+`INC [count]`
+`INC DH`
+### DEC - decrement
+Examples:
+`DEC [eta]`
+`DEC byte [ESI]`
+
+### ADD & SUB - add & subtract
+Syntax -> `ADD/SUB destination, source`
+***You cannot use momory-to-memory addition or substraction***
+*ADD or SUB operations set or clear the overflow and carry flags*
+#### !Before using a number from sys_read, first subtract ascii '0' from it, to convert it into a decimal number!
+#### To convert a decimal to ASCII, for sys_write, add '0' to it
+
+### MUL/IMUL - Unsigned Multiply / Integer Multiply
+Both affect the Carry and Overflow Flags
+Syntax -> `MUL/IMUL multiplier`
+The multiplicant is defined in **AL**, **AX** , or **EAX** before the MUL/IMUL instruction
+Depending if the result fits in the multiplicant register or not, the result gets stored in its multiplicant register, or in `AH` `AL`, `DX` `AX`, or `EDX` `EAX` 
+
+### DIV/IDIV - Unsigned Multiply / Integer Multiply
+Generates 2 outputs: **Quotient** and **Remainder**
+The processor generates an interrupt if overflow occurs
+Syntax -> `DIV/IDIV divisor`
+The operation affects 6 status flags... dunno which ones
+
+Examples:
+1. `AX`16bit divident / 8bit divisor -> `AL`quotient & `AH`remainder
+2. `DX``AX`32bit divident / 16bit divisor -> `AX`quotient & `DX`remainder
+3. `EDX``EAX`64bit divident / 32bit divisor -> `EAX`quotient & `EDX`remainder
+
+## Logical Instructions
+* AND
+* OR
+* XOR
+* TEST
+* NOT - has only one operand
+*memory-to-memory ops aren't possible*
+These instructions set the **CF**, **OF**, **PF**, **SF** and **ZF** flags
+ ### AND
+ Tricks:
+ 1. assuming BL contains 0011 1010, if you want to clear the high-order bits to zero, you AND with 0FH
+   `AND BL, 0FH`
