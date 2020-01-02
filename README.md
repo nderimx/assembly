@@ -486,15 +486,15 @@ Each open file has its own filepointer.
 
 #### SYS_CREATE
 
-`MOV EBX, name ; const char*`
-`MOV ECX, permissions ; int`
+`MOV EBX, name ; const char*`<br>
+`MOV ECX, permissions ; int`<br>
 `MOV EAX, 8 ; syscall number`
 
 ### SYS_LSEEK
 
-`MOV EBX, filedescriptor ; unsigned int`
-`MOV ECX, filepointer ; off_t - offset`
-`MOV EAX, 19 ; syscall number`
+`MOV EBX, filedescriptor ; unsigned int`<br>
+`MOV ECX, filepointer ; off_t - offset`<br>
+`MOV EAX, 19 ; syscall number`<br>
 `MOV EDX, reference_position ; unsigned int`
 
 ### File Descriptor
