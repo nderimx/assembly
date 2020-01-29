@@ -167,7 +167,27 @@ e.g. -> `MOV	[name],  DWORD 'Nuha'` ; HERE we specified the type of immediate to
 
 ## Variables
 
-### get from laptop uncommited content
+### Allocating storage for initialized data
+syntax: `var-name directive initial-val [,initial-val,...]`
+#### Define Directives:
+( **D** stands for Define and the second letter stands for the *Type Specifier*)
+ **DB**, **DW**, **DD**, **DQ**, **DT**
+
+#### Data Types
+Processor uses little endian byte order
+* Each byte character is stored as its ASCII value in HEX
+* Each decimal is stored as 16-bits HEX (Find out whether its encoden in hamming or smth else)
+* Negative decimals are converted to its 2-complement
+* Short floats are stored in 32-bits
+* Long floats are stored in 64-bits
+
+### Allocating storage for uninitialized data
+Basically declaring vars vithout initializing them
+#### Reserve directives are used:
+ **RESB**, **RESW**, **RESD**, **RESQ**, **REST**
+
+### Initializing arrays / multi-inits
+`books  TIMES  9  DW  0` - this is an array of length 9 with all elements initialized to 0
 
 ## Constants
 ### Directives
